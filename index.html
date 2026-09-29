@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6d28d9">
+<title>NEET Tracker 360</title>
+<style>
+:root{--p:#6d28d9;--p2:#8b5cf6;--bg:#f6f7fb;--card:#fff;--text:#171525;--muted:#747386;--line:#e9e7ef;--green:#16a34a;--red:#ef4444}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}.app{max-width:1100px;margin:auto;min-height:100vh;padding-bottom:80px}
+header{background:linear-gradient(135deg,#5b21b6,#7c3aed);color:white;padding:18px 18px 24px;border-radius:0 0 25px 25px}
+.head{display:flex;justify-content:space-between;align-items:center}.logo{font-size:21px;font-weight:900}.sub{font-size:12px;opacity:.8;margin-top:3px}.iconbtn{border:0;background:#ffffff22;color:#fff;width:40px;height:40px;border-radius:12px}
+.hero{margin-top:18px}.hero h1{margin:0;font-size:25px}.hero p{margin:5px 0 0;opacity:.82;font-size:13px}
+.content{padding:0 14px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:-5px}.stat{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;box-shadow:0 6px 25px #1715250b}.stat .n{font-size:25px;font-weight:900;margin:6px 0}.stat .l{font-size:12px;color:var(--muted)}
+.progress{height:8px;background:#eeeaf5;border-radius:20px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,var(--p),var(--p2));border-radius:20px}
+nav{display:flex;gap:8px;overflow:auto;padding:17px 0 10px}.tab{border:0;background:#eeeaf5;color:#5c5968;padding:10px 15px;border-radius:12px;font-weight:800;white-space:nowrap}.tab.active{background:var(--p);color:white}
+.view{display:none}.view.active{display:block}.section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin:10px 0}.section h2{font-size:18px;margin:0 0 12px}.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.muted{color:var(--muted);font-size:12px}
+.date{border:1px solid var(--line);padding:9px;border-radius:10px;background:#fff}
+.task{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid #f0eef4}.task:last-child{border:0}.check{width:22px;height:22px;accent-color:var(--p)}.taskmain{flex:1}.subject{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.4px}.Physics{color:#2563eb}.Chemistry{color:#16a34a}.Botany{color:#d97706}.Zoology{color:#db2777}.tasktitle{font-weight:800;margin-top:3px}.done .tasktitle{text-decoration:line-through;color:#a09daa}.pill{font-size:10px;background:#f0edf8;padding:5px 7px;border-radius:8px;color:#5e586c;font-weight:800}
+.btn{border:0;background:var(--p);color:white;padding:11px 14px;border-radius:11px;font-weight:800}.btn.light{background:#f0edf8;color:#423d50}.btn.red{background:#fee2e2;color:#b91c1c}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}.field{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:white}.field label{font-size:12px;font-weight:800;display:block;margin-bottom:5px}
+.chapter{border:1px solid var(--line);border-radius:14px;padding:13px;margin:10px 0}.chapter h3{font-size:14px;margin:0 0 6px}.mini{display:flex;gap:7px;flex-wrap:wrap}.mini span{font-size:11px;background:#f5f3f8;padding:5px 7px;border-radius:7px;color:#625d6c}
+.subjectbar{margin:14px 0}.subjectline{display:flex;justify-content:space-between;font-size:13px;font-weight:800;margin-bottom:6px}
+.empty{text-align:center;padding:35px 10px;color:var(--muted)}.notice{padding:12px;background:#f5f3ff;border:1px solid #e8ddff;border-radius:12px;color:#5530a0;font-size:12px}
+.modal{position:fixed;inset:0;background:#17152588;display:none;align-items:flex-end;justify-content:center;z-index:10}.modal.open{display:flex}.sheet{background:white;width:min(650px,100%);border-radius:22px 22px 0 0;padding:20px;max-height:90vh;overflow:auto}
+@media(max-width:800px){.cards{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr}.full{grid-column:auto}.content{padding:0 11px}}
+@media(min-width:801px){.modal{align-items:center}.sheet{border-radius:20px}}
+</style>
+
+<style>
+.install-card{display:none;background:#fff;border:1px solid #e6e1ef;border-radius:16px;padding:13px;margin:12px 0;box-shadow:0 6px 25px #1715250b}
+.install-card.show{display:block}.install-card b{display:block;margin-bottom:3px}.install-card button{margin-top:9px}
+@media(max-width:800px){body{padding-bottom:65px}.bottomnav{position:fixed;left:0;right:0;bottom:0;height:64px;background:#fff;border-top:1px solid #e8e5ee;display:flex;z-index:8;box-shadow:0 -5px 20px #17152510}.bottomnav button{flex:1;border:0;background:white;color:#777183;font-size:10px;font-weight:800}.bottomnav button.active{color:#6d28d9}.bottomnav span{display:block;font-size:20px;margin-bottom:2px}}
+@media(min-width:801px){.bottomnav{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="head"><div><div class="logo">NEET Tracker 360</div><div class="sub">Independent NEET 2027 study planner</div></div><div style="display:flex;gap:7px"><button id="installBtn" class="iconbtn" style="display:none" onclick="installApp()">⬇</button><button class="iconbtn" onclick="openSettings()">⚙</button></div></div>
+<div class="hero"><h1 id="greet">Your NEET journey</h1><p id="courseLine">Build your plan and stay consistent.</p></div>
+</header>
+<div class="content">
+<div id="installCard" class="install-card">
+<b>Install NEET Tracker 360</b>
+<span class="muted">Add it to your Android home screen for an app-like experience.</span><br>
+<button class="btn" onclick="installApp()">Install app</button>
+</div>
+<div class="cards">
+<div class="stat"><div class="l">Overall</div><div class="n" id="pct">0%</div><div class="progress"><div class="fill" id="pctbar" style="width:0%"></div></div></div>
+<div class="stat"><div class="l">Completed</div><div class="n" id="completed">0</div><div class="l" id="total">of 0 tasks</div></div>
+<div class="stat"><div class="l">Today</div><div class="n" id="todaynum">0/0</div><div class="l">tasks completed</div></div>
+<div class="stat"><div class="l">Streak</div><div class="n" id="streak">0 🔥</div><div class="l">consecutive days</div></div>
+</div>
+<nav>
+<button class="tab active" data-v="today">Today</button><button class="tab" data-v="plan">My Plan</button><button class="tab" data-v="backlog">Backlog</button><button class="tab" data-v="progress">Progress</button>
+</nav>
+
+<section id="today" class="view active">
+<div class="section"><div class="row"><div><h2 id="todayHeading">Today's schedule</h2><div class="muted">Complete tasks to update your progress.</div></div><input class="date" id="dayPicker" type="date"></div><div id="todayTasks"></div></div>
+<div class="section"><h2>Daily target</h2><div class="row"><b id="targetText">0 / 0 tasks</b><span class="muted" id="targetMessage">Add backlog to begin.</span></div><div class="progress" style="margin-top:10px"><div class="fill" id="todaybar"></div></div></div>
+</section>
+
+<section id="plan" class="view">
+<div class="section"><h2>Build your personalized plan</h2><div class="notice">Choose how many days you want to finish the backlog in. The planner distributes lectures, DPPs, PYQs and revisions across those days.</div>
+<div class="form" style="margin-top:13px">
+<div><label>Start date</label><input class="field" id="start" type="date"></div>
+<div><label>Finish in (days)</label><input class="field" id="days" type="number" min="1" value="60"></div>
+<div><label>Daily task target</label><input class="field" id="limit" type="number" min="1" value="6"></div>
+<div><label>Study hours target</label><input class="field" id="hours" type="number" min="1" step=".5" value="8"></div>
+<button class="btn full" onclick="generatePlan()">Generate personalized plan</button>
+</div></div>
+<div class="section"><div class="row"><h2>Plan summary</h2><span class="pill" id="planSummary">No plan yet</span></div><div id="planCalendar"></div></div>
+</section>
+
+<section id="backlog" class="view">
+<div class="section"><div class="row"><div><h2>Add a chapter</h2><div class="muted">Enter the workload you actually have in Yakeen 2.0.</div></div><button class="btn light" onclick="seedExample()">Example</button></div>
+<div class="form" style="margin-top:12px">
+<div><label>Subject</label><select class="field" id="sub"><option>Physics</option><option>Chemistry</option><option>Botany</option><option>Zoology</option></select></div>
+<div><label>Chapter</label><input class="field" id="chap" placeholder="e.g. Basic Mathematics"></div>
+<div><label>Lectures</label><input class="field" id="lec" type="number" min="0" value="1"></div>
+<div><label>DPPs</label><input class="field" id="dpp" type="number" min="0" value="1"></div>
+<div><label>PYQ sets</label><input class="field" id="pyq" type="number" min="0" value="1"></div>
+<div><label>Revisions</label><input class="field" id="rev" type="number" min="0" value="1"></div>
+<div class="full"><button class="btn" onclick="addChapter()">Add chapter</button></div>
+</div></div>
+<div class="section"><div class="row"><h2>Your backlog</h2><span class="pill" id="chapterCount">0 chapters</span></div><div id="backlogList"></div></div>
+</section>
+
+<section id="progress" class="view">
+<div class="section"><h2>Subject progress</h2><div id="subjectStats"></div></div>
+<div class="section"><h2>Plan completion</h2><div id="dateStats"></div></div>
+</section>
+</div>
+</div>
+
+<div class="bottomnav">
+<button data-v="today" class="active"><span>🏠</span>Today</button>
+<button data-v="plan"><span>📅</span>Plan</button>
+<button data-v="backlog"><span>📚</span>Backlog</button>
+<button data-v="progress"><span>📊</span>Stats</button>
+</div>
+
+<div class="modal" id="settingsModal"><div class="sheet"><div class="row"><h2 style="margin:0">Settings</h2><button class="btn light" onclick="closeSettings()">Close</button></div><div class="form" style="margin-top:15px"><div class="full"><label>Your name</label><input class="field" id="name"></div><div class="full"><label>Course</label><input class="field" id="course" value="Yakeen 2.0 — NEET 2027"></div><button class="btn full" onclick="saveSettings()">Save settings</button><button class="btn red full" onclick="resetAll()">Delete all app data</button></div></div></div>
+
+<script>
+const KEY='neet_tracker_360_v2';
+let S=JSON.parse(localStorage.getItem(KEY)||'null')||{name:'Student',course:'Yakeen 2.0 — NEET 2027',chapters:[],tasks:[],start:'',days:60,limit:6,hours:8};
+let selected=new Date().toISOString().slice(0,10);
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(KEY,JSON.stringify(S));render()}
+function esc(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function today(){return new Date().toISOString().slice(0,10)}
+function nice(d){return new Date(d+'T00:00:00').toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'})}
+function addDays(d,n){let x=new Date(d+'T00:00:00');x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)}
+function showView(v){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.v==v));document.querySelectorAll('.bottomnav button').forEach(x=>x.classList.toggle('active',x.dataset.v==v));document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id==v))}
+document.querySelectorAll('.tab,.bottomnav button').forEach(b=>b.onclick=()=>showView(b.dataset.v));
+$('dayPicker').onchange=e=>{selected=e.target.value;render()}
+function addChapter(){let chapter=$('chap').value.trim();if(!chapter)return alert('Enter a chapter name.');S.chapters.push({id:Date.now(),subject:$('sub').value,chapter,lec:+$('lec').value||0,dpp:+$('dpp').value||0,pyq:+$('pyq').value||0,rev:+$('rev').value||0});save();$('chap').value=''}
+function delChapter(id){S.chapters=S.chapters.filter(c=>c.id!=id);S.tasks=S.tasks.filter(t=>t.chapterId!=id);save()}
+function seedExample(){let examples=[['Physics','Basic Mathematics',3,3,1,1],['Chemistry','Some Basic Concepts of Chemistry',3,3,1,1],['Botany','The Living World',2,2,1,1],['Zoology','Animal Kingdom',3,3,1,1]];examples.forEach(x=>S.chapters.push({id:Date.now()+Math.random(),subject:x[0],chapter:x[1],lec:x[2],dpp:x[3],pyq:x[4],rev:x[5]}));save()}
+function generatePlan(){if(!S.chapters.length)return alert('Add your backlog chapters first.');S.start=$('start').value||today();S.days=Math.max(1,+$('days').value||60);S.limit=Math.max(1,+$('limit').value||6);S.hours=Math.max(1,+$('hours').value||8);
+let a=[];S.chapters.forEach(c=>{for(let i=1;i<=c.lec;i++)a.push(task(c,'Lecture',i));for(let i=1;i<=c.dpp;i++)a.push(task(c,'DPP',i));for(let i=1;i<=c.pyq;i++)a.push(task(c,'PYQ',i));for(let i=1;i<=c.rev;i++)a.push(task(c,'Revision',i))});
+S.tasks=a.map((x,i)=>{let day=Math.min(Math.floor(i/S.limit),S.days-1);return {...x,date:addDays(S.start,day),done:false}});
+selected=S.start;save();show('plan')}
+function task(c,kind,n){return{id:Date.now()+Math.random(),chapterId:c.id,subject:c.subject,chapter:c.chapter,kind,label:kind+' '+n}}
+function show(id){showView(id)}
+function toggle(id){let t=S.tasks.find(x=>x.id==id);if(t)t.done=!t.done;save()}
+function reschedule(id){let t=S.tasks.find(x=>x.id==id);if(!t)return;let dates=[...new Set(S.tasks.map(x=>x.date))].sort();let idx=dates.indexOf(t.date);t.date=dates[Math.min(idx+1,dates.length-1)]||t.date;save()}
+function calcStreak(){let done=[...new Set(S.tasks.filter(t=>t.done).map(t=>t.date))].sort().reverse(),n=0,base=new Date();base.setHours(0,0,0,0);for(let i=0;i<done.length;i++){if(done[i]==addDays(base.toISOString().slice(0,10),-i))n++;else break}return n}
+function render(){let total=S.tasks.length,done=S.tasks.filter(t=>t.done).length,p=total?Math.round(done/total*100):0; $('pct').textContent=p+'%';$('pctbar').style.width=p+'%';$('completed').textContent=done;$('total').textContent='of '+total+' tasks';let ts=S.tasks.filter(t=>t.date==selected),td=ts.filter(t=>t.done).length;$('todaynum').textContent=td+'/'+ts.length;$('streak').textContent=calcStreak()+' 🔥';$('greet').textContent='Hi, '+(S.name||'Student')+' 👋';$('courseLine').textContent=S.course;$('todayHeading').textContent=nice(selected)+' · Today';$('dayPicker').value=selected;
+$('todayTasks').innerHTML=ts.length?ts.map(t=>`<div class="task ${t.done?'done':''}"><input class="check" type="checkbox" ${t.done?'checked':''} onchange="toggle('${t.id}')"><div class="taskmain"><div class="subject ${t.subject}">${t.subject} · ${t.kind}</div><div class="tasktitle">${esc(t.chapter)}</div><div class="muted">${esc(t.label)}</div></div><button class="btn light" onclick="reschedule('${t.id}')" title="Move to next planned day">↗</button></div>`).join(''):'<div class="empty">No tasks for this day.<br>Add backlog and generate a plan.</div>';
+$('targetText').textContent=td+' / '+ts.length+' tasks';$('targetMessage').textContent=ts.length?(td==ts.length?'Perfect — target complete! 🎉':(ts.length-td)+' remaining'):'No target set';$('todaybar').style.width=(ts.length?td/ts.length*100:0)+'%';
+$('chapterCount').textContent=S.chapters.length+' chapters';$('backlogList').innerHTML=S.chapters.length?S.chapters.map(c=>`<div class="chapter"><div class="row"><div><h3><span class="subject ${c.subject}">${c.subject}</span> · ${esc(c.chapter)}</h3><div class="mini"><span>${c.lec} lectures</span><span>${c.dpp} DPP</span><span>${c.pyq} PYQ</span><span>${c.rev} revision</span></div></div><button class="btn red" onclick="delChapter('${c.id}')">Delete</button></div></div>`).join(''):'<div class="empty">Your backlog is empty.</div>';
+$('planSummary').textContent=S.tasks.length?S.tasks.length+' tasks · '+S.days+' days':'No plan yet';let dates=[...new Set(S.tasks.map(t=>t.date))].sort();$('planCalendar').innerHTML=dates.length?dates.slice(0,14).map(d=>{let a=S.tasks.filter(t=>t.date==d),n=a.filter(t=>t.done).length;return `<div class="chapter"><div class="row"><b>${nice(d)}</b><span class="pill">${n}/${a.length} done</span></div><div class="progress" style="margin-top:8px"><div class="fill" style="width:${a.length?n/a.length*100:0}%"></div></div></div>`}).join('')+(dates.length>14?'<div class="muted" style="text-align:center">Showing first 14 planned days.</div>':''):'<div class="empty">Generate a plan to see your calendar.</div>';
+let subs=['Physics','Chemistry','Botany','Zoology'];$('subjectStats').innerHTML=subs.map(s=>{let a=S.tasks.filter(t=>t.subject==s),d=a.filter(t=>t.done).length,q=a.length?Math.round(d/a.length*100):0;return `<div class="subjectbar"><div class="subjectline"><span class="subject ${s}">${s}</span><span>${d}/${a.length} · ${q}%</span></div><div class="progress"><div class="fill" style="width:${q}%"></div></div></div>`}).join('');
+$('dateStats').innerHTML=dates.slice(0,30).map(d=>{let a=S.tasks.filter(t=>t.date==d),n=a.filter(t=>t.done).length;return `<div class="row" style="padding:8px 0;border-bottom:1px solid var(--line)"><span>${nice(d)}</span><span class="muted">${n}/${a.length}</span></div>`}).join('')||'<div class="empty">No scheduled tasks.</div>';
+}
+function openSettings(){$('name').value=S.name;$('course').value=S.course;$('settingsModal').classList.add('open')}
+function closeSettings(){$('settingsModal').classList.remove('open')}
+function saveSettings(){S.name=$('name').value||'Student';S.course=$('course').value||'NEET 2027';save();closeSettings()}
+function resetAll(){if(confirm('Delete all chapters, tasks and settings?')){localStorage.removeItem(KEY);location.reload()}}
+$('start').value=today();$('dayPicker').value=selected;render();
+
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault(); deferredInstall=e;
+  $('installBtn').style.display='block';
+  $('installCard').classList.add('show');
+});
+async function installApp(){
+  if(!deferredInstall){
+    alert('If the Install option is not shown, open this app from Chrome over HTTPS and use Chrome menu → Add to Home screen.');
+    return;
+  }
+  deferredInstall.prompt();
+  await deferredInstall.userChoice;
+  deferredInstall=null;
+  $('installBtn').style.display='none';
+  $('installCard').classList.remove('show');
+}
+window.addEventListener('appinstalled',()=>{
+  $('installBtn').style.display='none';
+  $('installCard').classList.remove('show');
+});
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+</script>
+</body>
+</html>
